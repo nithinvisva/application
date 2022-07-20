@@ -1,0 +1,14 @@
+<div>
+    <p>List of {{dataList?.length}}</p>
+    <button mat-button (click)="openDialog('add')">+ Add</button>
+</div>
+<section *ngFor="let list of dataList">
+  <mat-card>
+    <mat-card-title>{{list.name}}</mat-card-title>
+    <mat-card-subtitle>{{list.email}}</mat-card-subtitle>
+    <mat-card-actions align="end">
+      <button mat-button (click)="openDialog('edit', list)">Edit</button>
+      <button mat-button (click)="openDialog('delete',list)">Delete</button>
+    </mat-card-actions>
+</mat-card>
+</section>

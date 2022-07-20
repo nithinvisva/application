@@ -1,0 +1,32 @@
+<form name="dataForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <div>
+        <mat-form-field>
+            <input matInput type="text" [(ngModel)]="formValues.name" placeholder="Name"
+                name="name" required #nameRef="ngModel">
+            <mat-error *ngIf="nameRef.hasError('required') && nameRef.touched">Required!
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput type="text" [(ngModel)]="formValues.username" placeholder="Username"
+                name="username" required #usernameRef="ngModel">
+            <mat-error *ngIf="usernameRef.hasError('required') && usernameRef.touched">Required!
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput type="text" [(ngModel)]="formValues.email"
+                placeholder="Email" name="email" [pattern]="emailPattern" required #emailIdRef="ngModel">
+            <mat-error *ngIf="emailIdRef.hasError('required') && emailIdRef.touched">Required!</mat-error>
+            <mat-error *ngIf="emailIdRef.hasError('pattern') && emailIdRef.touched">Incorrect Email!!
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="d-flex align-items-center justify-end">
+        <button mat-button mat-dialog-close (click)="closeDialog()">Cancel</button>
+        <button mat-raised-button [disabled]="!form.valid"
+            type="submit">{{type}}</button>
+    </div>
+</form>

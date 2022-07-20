@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-card-title>Sign Up</mat-card-title>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div>
+            <mat-form-field>
+                <input matInput type="text" [(ngModel)]="formValues.email"
+                    placeholder="Email" name="email" [pattern]="emailPattern" required #emailIdRef="ngModel">
+                <mat-error *ngIf="emailIdRef.hasError('required') && emailIdRef.touched">Required!</mat-error>
+                <mat-error *ngIf="emailIdRef.hasError('pattern') && emailIdRef.touched">Incorrect Email!!
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <input matInput type="text" [(ngModel)]="formValues.password"
+                    placeholder="Password" name="password" required #passwordRef="ngModel">
+                <mat-error *ngIf="passwordRef.hasError('required') && passwordRef.touched">Required!</mat-error>
+                <mat-error *ngIf="passwordRef.hasError('pattern') && passwordRef.touched">Password must have a Upper Case,Symbol,Number!!
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <input matInput type="text" [(ngModel)]="formValues.confirmPassword"
+                    placeholder="confirmPassword" name="confirmPassword"  required #confirmPasswordRef="ngModel">
+                <mat-error *ngIf="confirmPasswordRef.hasError('required') && confirmPasswordRef.touched">Required!</mat-error>
+                <mat-error *ngIf="checkPassword() && confirmPasswordRef.touched">Mismatch Password!!
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="align-items-center justify-end">
+            <button mat-raised-button [disabled]="!form.valid"
+                type="submit">Log In</button>
+        </div>
+    </form>
+    
+</mat-card>
