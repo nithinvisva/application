@@ -8,6 +8,8 @@ import { LoginModule } from './pages/login/login.module';
 import { HeaderModule } from './layout/header/header.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './_shared/shared.module';
+import { AuthGuard } from './_shared/components/auth.gaurd';
+import { LoginGuard } from './_shared/components/login.gaurd';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,7 @@ import { SharedModule } from './_shared/shared.module';
     BrowserAnimationsModule,
     SharedModule
   ],
-  providers: [],
+  providers: [AuthGuard , LoginGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

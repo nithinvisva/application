@@ -10,16 +10,26 @@ import { SignUpService } from '../services/sign-up.service';
 })
 export class SignUpComponent implements OnInit {
   formValues = {} as SignUp;
-  emailPattern=`^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$`;
-  passwordPattern='^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{6, 20}$';
+  emailPattern=new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
+  inputType: string = 'password';
+  visibilityIcon: string = 'visibility';
+  confirmInputType: string = 'password';
+  confirmVisibilityIcon: string = 'visibility';
 
   constructor(private signupService: SignUpService,
     private router:Router) { }
 
+
   ngOnInit(): void {
   }
-  checkPassword(){
-    return this.formValues.email === this.formValues.confirmPassword? true: false;
+  changeVisiblity(from: string) {
+    if (from == 'password') {
+      this.inputType = (this.inputType == 'password' ? 'text' : 'password');
+      this.visibilityIcon = (this.inputType == 'password' ? 'visibility' : 'visibility_off');
+    } else {
+      this.confirmInputType = (this.confirmInputType == 'password' ? 'text' : 'password');
+      this.confirmVisibilityIcon = (this.confirmInputType == 'password' ? 'visibility' : 'visibility_off');
+    }
   }
   onSubmit(){
     this.signupService.updateRegistry(this.formValues);

@@ -12,20 +12,24 @@
         </div>
         <div>
             <mat-form-field>
-                <input matInput type="text" [(ngModel)]="formValues.password"
-                    placeholder="Password" name="password" required #passwordRef="ngModel">
+                <input matInput type="{{inputType}}" [(ngModel)]="formValues.password"
+                    placeholder="Password" name="password" minlength="6" required #passwordRef="ngModel">
+                    <span matSuffix class="material-icons cursor-pointer"
+                        (click)="changeVisiblity('password')">{{visibilityIcon}}</span>
                 <mat-error *ngIf="passwordRef.hasError('required') && passwordRef.touched">Required!</mat-error>
-                <mat-error *ngIf="passwordRef.hasError('pattern') && passwordRef.touched">Password must have a Upper Case,Symbol,Number!!
+                <mat-error *ngIf="passwordRef.hasError('minlength') && passwordRef.touched">Atleast 6
+                    characters!
                 </mat-error>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
-                <input matInput type="text" [(ngModel)]="formValues.confirmPassword"
-                    placeholder="confirmPassword" name="confirmPassword"  required #confirmPasswordRef="ngModel">
+                <input matInput type="{{confirmInputType}}" [(ngModel)]="formValues.confirmPassword"
+                    placeholder="confirmPassword" name="confirmPassword" minlength="6" appCheckPassword="password" required #confirmPasswordRef="ngModel">
+                    <span matSuffix class="material-icons cursor-pointer"
+                        (click)="changeVisiblity('confirmPassword')">{{confirmVisibilityIcon}}</span>
                 <mat-error *ngIf="confirmPasswordRef.hasError('required') && confirmPasswordRef.touched">Required!</mat-error>
-                <mat-error *ngIf="checkPassword() && confirmPasswordRef.touched">Mismatch Password!!
-                </mat-error>
+                <mat-error *ngIf="(confirmPasswordRef.touched || confirmPasswordRef.dirty) && !confirmPasswordRef.valid">MisMatch Password</mat-error>
             </mat-form-field>
         </div>
         <div class="align-items-center justify-end">

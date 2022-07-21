@@ -10,14 +10,20 @@ import { LoginService } from '../services/login.service';
 })
 export class LoginComponent implements OnInit {
   formValues = {} as LogIn;
-  emailPattern=`^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$`;
-  passwordPattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"
+  emailPattern=new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
+  inputType: string = 'password';
+  visibilityIcon: string = 'visibility';
 
   constructor(private router:Router,
     private loginService: LoginService) { }
 
   ngOnInit(): void {
   }
+  changeVisiblity() {
+    this.inputType = this.inputType == 'password' ? 'text' : 'password';
+    this.visibilityIcon = this.inputType == 'password' ? 'visibility' : 'visibility_off';
+  }
+
 
   onSubmit(){
     (this.loginService.login(this.formValues))?this.router.navigate(['/home']): this.router.navigate(['/login']) 

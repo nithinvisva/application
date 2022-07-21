@@ -15,10 +15,11 @@ export class LoginGuard implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): boolean | Promise<boolean> {
-        const isAuthenticated = this.authService.getAuthStatus();
+        const isAuthenticated= this.authService.getAuthStatus();
         if (isAuthenticated) {
             this.router.navigate(['/home']);
+            return false;
         }
-        return !isAuthenticated;
+        return true;
     }
 }
