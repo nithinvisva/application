@@ -6,6 +6,11 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import * as _ from 'lodash';
 import { CrudService } from '../services/crud.service';
 import { ComponentType } from '@angular/cdk/overlay';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import {startWith} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
+
 
 
 
@@ -17,73 +22,26 @@ import { ComponentType } from '@angular/cdk/overlay';
 export class CrudOperationsComponent implements OnInit {
   dataList : dataList[];
   _=_;
+  searchCtrl: FormControl;
+  filteredList: Observable<any[]>;
 
   constructor(public matDialog: MatDialog,
     private crudService: CrudService) {
-    this.dataList =[{
-      "id": 1,
-      "name": "Leanne Graham",
-      "username": "Bret",
-      "email": "Sincere@april.biz",
-    },
-    {
-      "id": 2,
-      "name": "Ervin Howell",
-      "username": "Antonette",
-      "email": "Shanna@melissa.tv",
-    },
-    {
-      "id": 3,
-      "name": "Clementine Bauch",
-      "username": "Samantha",
-      "email": "Nathan@yesenia.net",
-    },
-    {
-      "id": 4,
-      "name": "Patricia Lebsack",
-      "username": "Karianne",
-      "email": "Julianne.OConner@kory.org",
-    },
-    {
-      "id": 5,
-      "name": "Chelsey Dietrich",
-      "username": "Kamren",
-      "email": "Lucio_Hettinger@annie.ca",
-    },
-    {
-      "id": 6,
-      "name": "Mrs. Dennis Schulist",
-      "username": "Leopoldo_Corkery",
-      "email": "Karley_Dach@jasper.info",
-    },
-    {
-      "id": 7,
-      "name": "Kurtis Weissnat",
-      "username": "Elwyn.Skiles",
-      "email": "Telly.Hoeger@billy.biz",
-    },
-    {
-      "id": 8,
-      "name": "Nicholas Runolfsdottir V",
-      "username": "Maxime_Nienow",
-      "email": "Sherwood@rosamond.me",
-    },
-    {
-      "id": 9,
-      "name": "Glenna Reichert",
-      "username": "Delphine",
-      "email": "Chaim_McDermott@dana.io",
-    },
-    {
-      "id": 10,
-      "name": "Clementina DuBuque",
-      "username": "Moriah.Stanton",
-      "email": "Rey.Padberg@karina.biz",
-    }
-  ]
+      this.dataList = this.crudService.getData();
+      this.searchCtrl = new FormControl();
+      this.filteredList = this.searchCtrl.valueChanges
+      .pipe(
+        startWith(''),
+        map(data => data ? this.filterList(data) : this.dataList.slice())
+      );
   }
 
+
   ngOnInit(): void {
+  }
+  filterList(name: string) {
+    return this.dataList.filter(item =>
+      item.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
   openDialog(type: string, editData?: dataList){
@@ -97,28 +55,25 @@ export class CrudOperationsComponent implements OnInit {
       if (result?.submit) {
         switch (type) {
           case 'delete':
-            _.remove(this.dataList, (item) => {
-              return item == result.data;
-            })
+            this.crudService.deleteData(result.data);
             break;
           case 'add':
-            this.dataList.push(result.data)
+            this.crudService.addData(result.data)
             break;
           case 'edit':
-            this.dataList.map((list)=>{
-              if(list.id == result.data.id){
-                list = result.data.data
-              }
-            })
+            this.crudService.updateData(result.data)            
             break;
           default:
             break;
         }
-      }else{
-        if(type == 'edit'){
-          this.dataList = this.crudService.getFromLocalStorage();
-        }
       }
+      this.dataList= this.crudService.getData();
+      this.searchCtrl.reset();
+      // else{
+      //   if(type == 'edit'){
+      //     this.dataList = this.crudService.getFromLocalStorage();
+      //   }
+      // }
     })
   }
   componentName(type: string):ComponentType<any> {
@@ -140,7 +95,7 @@ export class CrudOperationsComponent implements OnInit {
         return configData
       case 'add':
         const newData={
-          "id": this.dataList[this.dataList.length-1].id+1,
+          "id": this.dataList.length >0  ? this.dataList[this.dataList.length-1].id+1:1,
           "name": "",
           "username": "",
           "email": "",

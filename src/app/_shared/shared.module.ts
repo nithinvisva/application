@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
 import {MatCardModule} from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { CheckPasswordDirective } from "./directives/check-password.directive";
 import {MatIconModule} from '@angular/material/icon';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,9 @@ import {MatIconModule} from '@angular/material/icon';
         MatDialogModule,
         FormsModule,
         MatInputModule,
-        MatIconModule
+        MatIconModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule
     ],
     exports: [
         MatCardModule,
@@ -26,7 +29,9 @@ import {MatIconModule} from '@angular/material/icon';
         FormsModule,
         MatInputModule,
         CheckPasswordDirective,
-        MatIconModule
+        MatIconModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule
     ]
   })
   export class SharedModule { }

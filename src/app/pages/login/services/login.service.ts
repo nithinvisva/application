@@ -13,12 +13,12 @@ export class LoginService {
       const users: SignUp[] = JSON.parse(localStorage.getItem('register') || '{}');
       users.map((item)=>{
         if(item.email === data.email && item.password === data.password){
-          localStorage.setItem('auth','true')
-          return (localStorage.getItem('auth') == 'true')? true : false
+          localStorage.setItem('auth',data.email)
+          return (localStorage.getItem('auth') == data.email)? true : false
         }
-        return (localStorage.getItem('auth')== 'true')? true : false
+        return (localStorage.getItem('auth')== data.email)? true : false
       })
     }
-    return (localStorage.getItem('auth')== 'true')? true : false
+    return (localStorage.getItem('auth')== data.email)? true : false
   }
 }

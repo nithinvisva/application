@@ -1,14 +1,27 @@
 <div>
-    <p>List of {{dataList?.length}}</p>
+    <p>Total Datas:{{dataList?.length}} </p>
     <button mat-button (click)="openDialog('add')">+ Add</button>
 </div>
-<section *ngFor="let list of dataList">
-  <mat-card>
-    <mat-card-title>{{list.name}}</mat-card-title>
-    <mat-card-subtitle>{{list.email}}</mat-card-subtitle>
-    <mat-card-actions align="end">
-      <button mat-button (click)="openDialog('edit', list)">Edit</button>
-      <button mat-button (click)="openDialog('delete',list)">Delete</button>
-    </mat-card-actions>
-</mat-card>
+<div *ngIf="dataList.length > 0; else noRecord">
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="search" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
+      <mat-autocomplete #auto="matAutocomplete">
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <section *ngFor="let list of filteredList | async">
+    <mat-card >
+      <mat-card-title>{{list.name}}</mat-card-title>
+      <mat-card-subtitle>{{list.email}}</mat-card-subtitle>
+      <mat-card-actions align="end">
+        <button mat-button (click)="openDialog('edit', list)">Edit</button>
+        <button mat-button (click)="openDialog('delete',list)">Delete</button>
+      </mat-card-actions>
+  </mat-card>
 </section>
+  
+</div>
+<ng-template #noRecord>
+  <p>Record Is Empty</p>
+</ng-template>
