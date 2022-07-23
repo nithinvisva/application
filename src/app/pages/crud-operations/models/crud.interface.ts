@@ -1,11 +1,19 @@
-export interface dataList {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
+export interface ProductList {
+    productName: string;
+    productId: string;
+    userId: string;
+    productDesc: string;
+    _id: string;
+}
+export interface AddProductList {
+    productName: string;
+    productId: string;
+    userId: string;
+    productDesc: string;
+    _id?: string;
 }
 
-export interface addUpdate {
-    listData: dataList;
+export interface AddUpdate {
+    productData: AddProductList;
     from: string;
 }

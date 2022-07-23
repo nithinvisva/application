@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { addUpdate, dataList } from '../../models/crud.interface';
+import { AddUpdate, AddProductList } from '../../models/crud.interface';
 
 @Component({
   selector: 'app-add-edit-dialog',
@@ -8,14 +8,13 @@ import { addUpdate, dataList } from '../../models/crud.interface';
   styleUrls: ['./add-edit-dialog.component.scss']
 })
 export class AddEditDialogComponent implements OnInit {
-  emailPattern = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$';
-  formValues = {} as dataList;
+  formValues = {} as AddProductList;
   type:string;
 
   constructor(private dialogRef: MatDialogRef<AddEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private dataFormValues: addUpdate) { 
+    @Inject(MAT_DIALOG_DATA) private dataFormValues: AddUpdate) { 
       this.type = this.dataFormValues.from;
-      this.formValues = this.dataFormValues.listData;
+      this.formValues = this.dataFormValues.productData;
     }
 
   ngOnInit(): void {  

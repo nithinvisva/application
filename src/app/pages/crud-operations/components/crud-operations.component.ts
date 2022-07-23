@@ -1,5 +1,5 @@
 import { Component, OnInit  } from '@angular/core';
-import { dataList } from '../models/crud.interface';
+import { ProductList } from '../models/crud.interface';
 import { MatDialog } from '@angular/material/dialog'
 import { AddEditDialogComponent } from '../components/add-edit-dialog/add-edit-dialog.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
@@ -10,7 +10,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import {startWith} from 'rxjs/operators';
 import {map} from 'rxjs/operators';
-
+import { UUID } from 'angular2-uuid';
 
 
 
@@ -20,31 +20,72 @@ import {map} from 'rxjs/operators';
   styleUrls: ['./crud-operations.component.scss']
 })
 export class CrudOperationsComponent implements OnInit {
-  dataList : dataList[];
+  productList = [] as ProductList[];
   _=_;
   searchCtrl: FormControl;
   filteredList: Observable<any[]>;
 
   constructor(public matDialog: MatDialog,
     private crudService: CrudService) {
-      this.dataList = this.crudService.getData();
+      this.getProductData();
       this.searchCtrl = new FormControl();
       this.filteredList = this.searchCtrl.valueChanges
       .pipe(
         startWith(''),
-        map(data => data ? this.filterList(data) : this.dataList.slice())
+        map(data => data ? this.filterList(data) : this.productList.slice())
       );
   }
 
 
   ngOnInit(): void {
   }
+
+  getProductData(){
+    this.crudService.getData().subscribe({
+      next: result =>{
+        const userId = this.crudService.getUserId()
+        this.productList = result.data.filter((data:ProductList)=> data.userId == userId  )
+        console.log(this.productList)
+        this.searchCtrl.reset();
+      },
+      error: error=>{
+
+      }
+    })
+  }
+  addProduct(product: ProductList){
+    this.crudService.addData(product).subscribe({
+      next: () =>{
+      },
+      error: ()=>{
+
+      }
+    })
+  }
+  updateProduct(product: ProductList){
+    this.crudService.updateData(product).subscribe({
+      next: () =>{
+      },
+      error: ()=>{
+
+      }
+    })
+  }
+  deleteProduct(product: ProductList){
+    this.crudService.deleteData(product._id).subscribe({
+      next: () =>{
+      },
+      error: ()=>{
+
+      }
+    })
+  }
   filterList(name: string) {
-    return this.dataList.filter(item =>
-      item.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    return this.productList.filter(item =>
+      item.productName.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
-  openDialog(type: string, editData?: dataList){
+  openDialog(type: string, editData?: ProductList){
     const dialogRef = this.matDialog.open(this.componentName(type),{
       width: 'auto',
       height: 'auto',
@@ -55,23 +96,24 @@ export class CrudOperationsComponent implements OnInit {
       if (result?.submit) {
         switch (type) {
           case 'delete':
-            this.crudService.deleteData(result.data);
+            this.deleteProduct(result.data)
+            // this.crudService.deleteData(result.data);
             break;
           case 'add':
-            this.crudService.addData(result.data)
+             this.addProduct(result.data)
             break;
           case 'edit':
-            this.crudService.updateData(result.data)            
+            this.updateProduct(result.data)
+            // this.crudService.updateData(result.data)            
             break;
           default:
             break;
         }
       }
-      this.dataList= this.crudService.getData();
-      this.searchCtrl.reset();
+      this.getProductData();
       // else{
       //   if(type == 'edit'){
-      //     this.dataList = this.crudService.getFromLocalStorage();
+      //     this.productList = this.crudService.getFromLocalStorage();
       //   }
       // }
     })
@@ -83,26 +125,26 @@ export class CrudOperationsComponent implements OnInit {
       case 'add':
         return AddEditDialogComponent
       case 'edit':
-        this.crudService.updateToLocalStorage(this.dataList);
+        // this.crudService.updateToLocalStorage(this.productList);
         return AddEditDialogComponent
       default:
         return AddEditDialogComponent
     }
   }
-  getConfig(type: string, configData?: dataList){
+  getConfig(type: string, configData?: ProductList){
     switch (type) {
       case 'delete':
         return configData
       case 'add':
         const newData={
-          "id": this.dataList.length >0  ? this.dataList[this.dataList.length-1].id+1:1,
-          "name": "",
-          "username": "",
-          "email": "",
+          'productId': UUID.UUID().toString(),
+          'productName':"",
+          'productDesc':"",
+          'userId': this.crudService.getUserId()
         }
-        return {listData: newData, from: 'Add'}
+        return {productData: newData, from: 'Add'}
       case 'edit':
-         return {listData: configData, from: 'Update'}
+         return {productData: configData, from: 'Update'}
       default:
         return {}
     }

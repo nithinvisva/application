@@ -1,8 +1,8 @@
 <div>
-    <p>Total Datas:{{dataList?.length}} </p>
+    <p>Total Datas: {{productList?.length}} </p>
     <button mat-button (click)="openDialog('add')">+ Add</button>
 </div>
-<div *ngIf="dataList.length > 0; else noRecord">
+<div *ngIf="productList.length > 0; else noRecord">
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <input matInput placeholder="search" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
@@ -12,8 +12,8 @@
   </form>
   <section *ngFor="let list of filteredList | async">
     <mat-card >
-      <mat-card-title>{{list.name}}</mat-card-title>
-      <mat-card-subtitle>{{list.email}}</mat-card-subtitle>
+      <mat-card-title>{{list.productName}}</mat-card-title>
+      <mat-card-subtitle>{{list.productDesc}}</mat-card-subtitle>
       <mat-card-actions align="end">
         <button mat-button (click)="openDialog('edit', list)">Edit</button>
         <button mat-button (click)="openDialog('delete',list)">Delete</button>

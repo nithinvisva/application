@@ -7,6 +7,6 @@ export class AuthServiceService {
 
   constructor() { }
   getAuthStatus():boolean{
-    return (localStorage.getItem('auth'))? true : false
+    return (localStorage.getItem('userId'))? true : false
   }
 }

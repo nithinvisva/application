@@ -1,7 +1,7 @@
 <form name="dataForm" #form="ngForm" (ngSubmit)="onSubmit()">
     <div>
         <mat-form-field>
-            <input matInput type="text" [(ngModel)]="formValues.name" placeholder="Name"
+            <input matInput type="text" [(ngModel)]="formValues.productName" placeholder="Name"
                 name="name" required #nameRef="ngModel">
             <mat-error *ngIf="nameRef.hasError('required') && nameRef.touched">Required!
             </mat-error>
@@ -9,18 +9,9 @@
     </div>
     <div>
         <mat-form-field>
-            <input matInput type="text" [(ngModel)]="formValues.username" placeholder="Username"
+            <input matInput type="text" [(ngModel)]="formValues.productDesc" placeholder="Username"
                 name="username" required #usernameRef="ngModel">
             <mat-error *ngIf="usernameRef.hasError('required') && usernameRef.touched">Required!
-            </mat-error>
-        </mat-form-field>
-    </div>
-    <div>
-        <mat-form-field>
-            <input matInput type="text" [(ngModel)]="formValues.email"
-                placeholder="Email" name="email" [pattern]="emailPattern" required #emailIdRef="ngModel">
-            <mat-error *ngIf="emailIdRef.hasError('required') && emailIdRef.touched">Required!</mat-error>
-            <mat-error *ngIf="emailIdRef.hasError('pattern') && emailIdRef.touched">Incorrect Email!!
             </mat-error>
         </mat-form-field>
     </div>
