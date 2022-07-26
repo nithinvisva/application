@@ -14,7 +14,7 @@ export class AddEditDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<AddEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private dataFormValues: AddUpdate) { 
       this.type = this.dataFormValues.from;
-      this.formValues = this.dataFormValues.productData;
+      this.formValues = JSON.parse(JSON.stringify(this.dataFormValues.productData));
     }
 
   ngOnInit(): void {  
