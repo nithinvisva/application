@@ -5,10 +5,11 @@
 <div *ngIf="productList.length > 0; else noRecord">
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="search" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
+      <input matInput placeholder="search" appSpecialCharacter appDisableCopyPaste (warning)="warning($event)" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
       <mat-autocomplete #auto="matAutocomplete">
       </mat-autocomplete>
     </mat-form-field>
+    <p>{{message}}</p>
   </form>
   <section *ngFor="let list of filteredList | async">
     <mat-card >

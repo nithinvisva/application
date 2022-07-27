@@ -8,10 +8,14 @@ import { CheckPasswordDirective } from "./directives/check-password.directive";
 import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { HttpClientModule } from "@angular/common/http";
+import { SpecialCharacterDirective } from './directives/special-character.directive';
+import { DisableCopyPasteDirective } from './directives/disable-copy-paste.directive';
 
 @NgModule({
     declarations: [
-       CheckPasswordDirective
+       CheckPasswordDirective,
+       SpecialCharacterDirective,
+       DisableCopyPasteDirective,
     ],
     imports: [
         MatCardModule,
@@ -34,7 +38,9 @@ import { HttpClientModule } from "@angular/common/http";
         MatIconModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        SpecialCharacterDirective,
+        DisableCopyPasteDirective
     ]
   })
   export class SharedModule { }

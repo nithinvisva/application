@@ -14,6 +14,7 @@ import { UUID } from 'angular2-uuid';
 
 
 
+
 @Component({
   selector: 'app-crud-operations',
   templateUrl: './crud-operations.component.html',
@@ -24,6 +25,8 @@ export class CrudOperationsComponent implements OnInit {
   _=_;
   searchCtrl: FormControl;
   filteredList: Observable<any[]>;
+  array :string[] = [];
+  message!:string;
 
   constructor(public matDialog: MatDialog,
     private crudService: CrudService) {
@@ -148,5 +151,10 @@ export class CrudOperationsComponent implements OnInit {
       default:
         return {}
     }
+  }
+
+  warning(event :string) {
+    this.message = event
+    setTimeout(() => (this.message = ''), 2000);
   }
 }
