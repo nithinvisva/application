@@ -8,10 +8,11 @@ import { ProductList } from '../../models/crud.interface';
   styleUrls: ['./delete-dialog.component.scss']
 })
 export class DeleteDialogComponent implements OnInit {
-  
-
+  productNames: string =''
   constructor(private dialogRef: MatDialogRef<DeleteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataFormValues: ProductList) { }
+    @Inject(MAT_DIALOG_DATA) public dataFormValues: ProductList[]) {
+      this.productNames = (dataFormValues.map((data)=> data.productName)).toString()
+     }
 
   ngOnInit(): void {
   }

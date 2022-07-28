@@ -43,8 +43,8 @@ export class CommonApi {
             );
     }
 
-    httpDelete(path: string): Observable<any> {
-        return this.http.delete(this.baseUrl.concat(path))
+    httpDelete(path: string, data?:any): Observable<any> {
+        return this.http.delete(this.baseUrl.concat(path),)
             .pipe(
                 map(res => res),
                 catchError(this.handleError)
@@ -57,6 +57,16 @@ export class CommonApi {
                 map(res => res),
                 catchError(this.handleError)
             );
+    }
+    
+    httpDeleteByIds(path: string, data: any):Observable<any>{
+        return this.http.delete( this.baseUrl.concat(path), {
+            body: { deleteByIds: data }
+        }).pipe(
+            map(res=> res),
+            catchError(this.handleError)
+        )
+
     }
 
     private handleError(error: Response): any {

@@ -15,25 +15,26 @@ export class CrudService extends CommonService{
     return (localStorage.getItem('userId') || '{}');
   }
 
-  getData():Observable<any>{
+  getProduct():Observable<any>{
     const url = CrudAPiUrl.getProduct;
     return this.httpGet(url);
   }
 
-  addData(product: ProductList):Observable<any>{
+  addProduct(product: ProductList):Observable<any>{
     const url = CrudAPiUrl.createProduct;
     return this.httpPost(url, product)
   }
 
-  updateData(product: ProductList){
+  updateProduct(product: ProductList){
     const url = CrudAPiUrl.updateProduct.replace(':id', product._id);
     return this.httpPut(url, product)
   }
 
-  deleteData(id: string){
-    const url = CrudAPiUrl.deleteProduct.replace(':id', id);
-    return this.httpDelete(url)
+  deleteProductById(ids: string[]){
+    const url = CrudAPiUrl.deleteProductByIds;
+    return this.httpDeleteByIds(url,ids)
   }
+  
   // deleteData(data: dataList){
   //   if(localStorage.getItem('auth')){
   //     const email:string = (localStorage.getItem('auth') || '{}');

@@ -10,6 +10,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { HttpClientModule } from "@angular/common/http";
 import { SpecialCharacterDirective } from './directives/special-character.directive';
 import { DisableCopyPasteDirective } from './directives/disable-copy-paste.directive';
+import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -26,7 +28,9 @@ import { DisableCopyPasteDirective } from './directives/disable-copy-paste.direc
         MatIconModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatTableModule,
+        MatCheckboxModule
     ],
     exports: [
         MatCardModule,
@@ -40,7 +44,9 @@ import { DisableCopyPasteDirective } from './directives/disable-copy-paste.direc
         ReactiveFormsModule,
         HttpClientModule,
         SpecialCharacterDirective,
-        DisableCopyPasteDirective
+        DisableCopyPasteDirective,
+        MatTableModule,
+        MatCheckboxModule
     ]
   })
   export class SharedModule { }

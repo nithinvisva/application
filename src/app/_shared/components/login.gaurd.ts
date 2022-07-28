@@ -6,6 +6,8 @@ import {
     RouterStateSnapshot,
 } from "@angular/router";
 import { AuthServiceService } from "../services/auth-service.service";
+import { map, catchError} from 'rxjs/operators';
+import { of } from 'rxjs';
   
 @Injectable()
 export class LoginGuard implements CanActivate {
@@ -14,12 +16,17 @@ export class LoginGuard implements CanActivate {
         private router: Router) { }
     canActivate(
         route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): boolean | Promise<boolean> {
-        const isAuthenticated= this.authService.getAuthStatus();
-        if (isAuthenticated) {
-            this.router.navigate(['/home']);
-            return false;
+        state: RouterStateSnapshot): any | Promise<boolean> {
+        return this.authService.getAuthStatus().pipe(map((res)=>{
+            if(res.isloggedIn){
+                this.router.navigate(['/home']);
+                    return false;
+            }
+            return true
+        }),
+        catchError((err) =>{
+            return of(true)
         }
-        return true;
+        ))
     }
 }

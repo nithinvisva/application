@@ -1,8 +1,20 @@
 <div>
     <p>Total Datas: {{productList?.length}} </p>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="search" appSpecialCharacter appDisableCopyPaste (warning)="warning($event)" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let list of filteredList | async" [value]="list.productName" (onSelectionChange)="selectedOption(list)">
+            {{list.productName}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <p>{{message}}</p>
+    </form>
     <button mat-button (click)="openDialog('add')">+ Add</button>
+    <button  *ngIf="selection.selected.length > 0"mat-button (click)="openDialog('delete')">Delete</button>
 </div>
-<div *ngIf="productList.length > 0; else noRecord">
+<!-- <div *ngIf="productList.length > 0; else noRecord">
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <input matInput placeholder="search" appSpecialCharacter appDisableCopyPaste (warning)="warning($event)" aria-label="search" [matAutocomplete]="auto" [formControl]="searchCtrl">
@@ -22,7 +34,55 @@
   </mat-card>
 </section>
   
-</div>
+</div> -->
 <ng-template #noRecord>
   <p>Record Is Empty</p>
 </ng-template>
+<div class="example-container mat-elevation-z8" *ngIf="productList.length > 0; else noRecord">
+
+  <mat-table [dataSource]="dataSource">
+    
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="_id">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row._id}} </mat-cell>
+    </ng-container>
+
+    <!-- Product Name -->
+    <ng-container matColumnDef="productName">
+      <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.productName}}</mat-cell>
+    </ng-container>
+
+    <!--  Product Desc -->
+    <ng-container matColumnDef="productDesc">
+      <mat-header-cell *matHeaderCellDef > Product Desc </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.productDesc}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+      <mat-cell *matCellDef="let row"> <button mat-button (click)="openDialog('edit',row); $event.stopPropagation()"> Edit</button> </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+</div>
+

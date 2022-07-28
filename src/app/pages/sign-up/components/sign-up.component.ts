@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/_utils/services/commonService';
 import { SignUp } from '../models/signup.interface';
 import { SignUpService } from '../services/sign-up.service';
 
@@ -16,7 +17,7 @@ export class SignUpComponent implements OnInit {
   confirmInputType: string = 'password';
   confirmVisibilityIcon: string = 'visibility';
 
-  constructor(private signupService: SignUpService,
+  constructor(private signupService: CommonService,
     private router:Router) { }
 
 
@@ -32,8 +33,18 @@ export class SignUpComponent implements OnInit {
     }
   }
   onSubmit(){
-    this.signupService.updateRegistry(this.formValues);
-    this.router.navigate(['/login']);
+    const data = {
+      email: this.formValues.email,
+      password: this.formValues.confirmPassword
+    }
+    this.signupService.updateRegistry(data).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: error => {
+        console.log(error)
+      }
+    })
   }
 
 }

@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 import {startWith} from 'rxjs/operators';
 import {map} from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
 
 
@@ -27,6 +29,9 @@ export class CrudOperationsComponent implements OnInit {
   filteredList: Observable<any[]>;
   array :string[] = [];
   message!:string;
+  displayedColumns = ['select', '_id', 'productName', 'productDesc', 'edit'];
+  dataSource!: MatTableDataSource<ProductList>
+  selection = new SelectionModel<ProductList>(true, []);
 
   constructor(public matDialog: MatDialog,
     private crudService: CrudService) {
@@ -44,11 +49,10 @@ export class CrudOperationsComponent implements OnInit {
   }
 
   getProductData(){
-    this.crudService.getData().subscribe({
+    this.crudService.getProduct().subscribe({
       next: result =>{
-        const userId = this.crudService.getUserId()
-        this.productList = result.data.filter((data:ProductList)=> data.userId == userId  )
-        console.log(this.productList)
+        this.productList = result.data
+        this.dataSource = new MatTableDataSource(this.productList);
         this.searchCtrl.reset();
       },
       error: error=>{
@@ -57,7 +61,7 @@ export class CrudOperationsComponent implements OnInit {
     })
   }
   addProduct(product: ProductList){
-    this.crudService.addData(product).subscribe({
+    this.crudService.addProduct(product).subscribe({
       next: () =>{
       },
       error: ()=>{
@@ -66,7 +70,7 @@ export class CrudOperationsComponent implements OnInit {
     })
   }
   updateProduct(product: ProductList){
-    this.crudService.updateData(product).subscribe({
+    this.crudService.updateProduct(product).subscribe({
       next: () =>{
       },
       error: ()=>{
@@ -74,8 +78,11 @@ export class CrudOperationsComponent implements OnInit {
       }
     })
   }
-  deleteProduct(product: ProductList){
-    this.crudService.deleteData(product._id).subscribe({
+  deleteProduct(products: ProductList[]){
+   const productIds= products.map((data)=>{
+    return data._id
+   })
+    this.crudService.deleteProductById(productIds).subscribe({
       next: () =>{
       },
       error: ()=>{
@@ -100,25 +107,19 @@ export class CrudOperationsComponent implements OnInit {
         switch (type) {
           case 'delete':
             this.deleteProduct(result.data)
-            // this.crudService.deleteData(result.data);
             break;
           case 'add':
              this.addProduct(result.data)
             break;
           case 'edit':
-            this.updateProduct(result.data)
-            // this.crudService.updateData(result.data)            
+            this.updateProduct(result.data)           
             break;
           default:
             break;
         }
       }
       this.getProductData();
-      // else{
-      //   if(type == 'edit'){
-      //     this.productList = this.crudService.getFromLocalStorage();
-      //   }
-      // }
+      this.selection.clear();
     })
   }
   componentName(type: string):ComponentType<any> {
@@ -128,7 +129,6 @@ export class CrudOperationsComponent implements OnInit {
       case 'add':
         return AddEditDialogComponent
       case 'edit':
-        // this.crudService.updateToLocalStorage(this.productList);
         return AddEditDialogComponent
       default:
         return AddEditDialogComponent
@@ -137,7 +137,7 @@ export class CrudOperationsComponent implements OnInit {
   getConfig(type: string, configData?: ProductList){
     switch (type) {
       case 'delete':
-        return configData
+        return this.selection.selected
       case 'add':
         const newData={
           'productId': UUID.UUID().toString(),
@@ -156,5 +156,23 @@ export class CrudOperationsComponent implements OnInit {
   warning(event :string) {
     this.message = event
     setTimeout(() => (this.message = ''), 2000);
+  }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  selectedOption(product: ProductList){
+    this.dataSource = new MatTableDataSource<ProductList>([product])
   }
 }

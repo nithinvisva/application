@@ -3,6 +3,7 @@ import { CommonApi } from '../commonApi';
 import * as _ from 'lodash';
 import { Observable, throwError } from 'rxjs';
 import { LogIn } from 'src/app/pages/login/models/login.interface';
+import { authApiUrl } from './apiUrls';
 
 
 @Injectable({
@@ -10,11 +11,17 @@ import { LogIn } from 'src/app/pages/login/models/login.interface';
 })
 export class CommonService extends CommonApi {
     login(loginData:LogIn): Observable<any>{
-        const url='login';
-        return this.httpPost(url, loginData);
+        return this.httpPost(authApiUrl.login, loginData);
     }
 
-    setAuth(id: string){
-        localStorage.setItem('userId',id)
+    updateRegistry(loginData: LogIn):Observable<any>{
+        return this.httpPost(authApiUrl.signUp, loginData)
+    }
+
+    setAuth(token: string){
+        localStorage.setItem('auth_token',token);
+    }
+    removeAuth(){
+        localStorage.removeItem('auth_token');
     }
 }

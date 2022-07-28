@@ -2,5 +2,6 @@
     <mat-card-title>{{title}}</mat-card-title>
     <mat-card-actions align="end" *ngIf="title !=='CRUD Operations'">
       <button mat-button [routerLink]="title == 'Log In'?['\sign-up']:['\login']">{{title == 'Log In'? 'Sign Up': 'Log In'}}</button>
+      <button mat-button *ngIf="title =='CRUD Operations'" (click)="removeAuth()">Log Out</button>
     </mat-card-actions>
 </mat-card>

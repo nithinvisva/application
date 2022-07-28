@@ -13,6 +13,16 @@ export class HttpsInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const token = localStorage.getItem('auth_token')
+    if(token){request = request.clone({
+      setHeaders: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':'http://localhost:4200',
+        'Access-Control-Allow-Credentials': 'true',
+      }
+    });
+  }else{
     request = request.clone({
       setHeaders: {
         'Content-Type': 'application/json',
@@ -20,6 +30,7 @@ export class HttpsInterceptor implements HttpInterceptor {
         'Access-Control-Allow-Credentials': 'true',
       }
     });
+  }
     return next.handle(request);
   }
 }

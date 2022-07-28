@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CommonService } from 'src/app/_utils/services/commonService';
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,13 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Input() title:string ='';
 
-  constructor() {
+  constructor(private commonService: CommonService) {
    }
 
   ngOnInit(): void {
+  }
+  removeAuth(){
+    this.commonService.removeAuth();
   }
 
 }
