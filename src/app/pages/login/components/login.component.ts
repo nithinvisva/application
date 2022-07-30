@@ -1,10 +1,10 @@
-import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NotificationService } from 'src/app/layout/icon-snack-bar/services/notification.service';
 import { CommonService } from 'src/app/_utils/services/commonService';
-import { LogIn, LogInResponse } from '../models/login.interface';
-import { LoginService } from '../services/login.service';
+import { LogIn} from '../models/login.interface';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +12,7 @@ import { LoginService } from '../services/login.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  _=_;
   @ViewChild('form') loginForm: NgForm
   formValues = {} as LogIn;
   emailPattern=new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   visibilityIcon: string = 'visibility';
 
   constructor(private router:Router,
-    private loginService: CommonService ) { 
+    private loginService: CommonService,
+    private notification:NotificationService ) { 
       this.loginForm={} as NgForm
     }
 
@@ -40,7 +42,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error: error => {
-        console.log(error)
+        this.notification.openErrorSnackBar(_.get(error,'error','Something Went Wrong In Login'))
       }
     })
   }

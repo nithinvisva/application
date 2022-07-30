@@ -12,6 +12,7 @@ import { SpecialCharacterDirective } from './directives/special-character.direct
 import { DisableCopyPasteDirective } from './directives/disable-copy-paste.directive';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         ReactiveFormsModule,
         HttpClientModule,
         MatTableModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatSnackBarModule
     ],
     exports: [
         MatCardModule,
@@ -46,7 +48,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         SpecialCharacterDirective,
         DisableCopyPasteDirective,
         MatTableModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatSnackBarModule
     ]
   })
   export class SharedModule { }

@@ -13,6 +13,7 @@ import {map} from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
+import { NotificationService } from 'src/app/layout/icon-snack-bar/services/notification.service';
 
 
 
@@ -34,7 +35,8 @@ export class CrudOperationsComponent implements OnInit {
   selection = new SelectionModel<ProductList>(true, []);
 
   constructor(public matDialog: MatDialog,
-    private crudService: CrudService) {
+    private crudService: CrudService,
+    private notification: NotificationService) {
       this.getProductData();
       this.searchCtrl = new FormControl();
       this.filteredList = this.searchCtrl.valueChanges
@@ -51,30 +53,32 @@ export class CrudOperationsComponent implements OnInit {
   getProductData(){
     this.crudService.getProduct().subscribe({
       next: result =>{
-        this.productList = result.data
+        this.productList = _.get(result,'data',[])
         this.dataSource = new MatTableDataSource(this.productList);
         this.searchCtrl.reset();
       },
       error: error=>{
-
+        this.notification.openErrorSnackBar(_.get(error,'error','Something Went Wrong!!'))
       }
     })
   }
   addProduct(product: ProductList){
     this.crudService.addProduct(product).subscribe({
-      next: () =>{
+      next: (res) =>{
+        this.notification.openSuccessSnackBar(_.get(res,'message','added the Product'))
       },
-      error: ()=>{
-
+      error: (err)=>{
+        this.notification.openErrorSnackBar(_.get(err,'error','Something Went Wrong!!'))
       }
     })
   }
   updateProduct(product: ProductList){
     this.crudService.updateProduct(product).subscribe({
-      next: () =>{
+      next: (res) =>{
+        this.notification.openSuccessSnackBar(_.get(res,'message','updated the Product'))
       },
-      error: ()=>{
-
+      error: (err)=>{
+        this.notification.openErrorSnackBar(_.get(err,'error','Something Went Wrong!!'))
       }
     })
   }
@@ -83,10 +87,11 @@ export class CrudOperationsComponent implements OnInit {
     return data._id
    })
     this.crudService.deleteProductById(productIds).subscribe({
-      next: () =>{
+      next: (res) =>{
+        this.notification.openSuccessSnackBar(_.get(res,'message','Deleted the Product'))
       },
-      error: ()=>{
-
+      error: (err)=>{
+        this.notification.openErrorSnackBar(_.get(err,'error','Something Went Wrong!!'))
       }
     })
   }
@@ -154,8 +159,7 @@ export class CrudOperationsComponent implements OnInit {
   }
 
   warning(event :string) {
-    this.message = event
-    setTimeout(() => (this.message = ''), 2000);
+    this.notification.openErrorSnackBar(event)
   }
   isAllSelected() {
     const numSelected = this.selection.selected.length;

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NotificationService } from 'src/app/layout/icon-snack-bar/services/notification.service';
 import { CommonService } from 'src/app/_utils/services/commonService';
 import { SignUp } from '../models/signup.interface';
-import { SignUpService } from '../services/sign-up.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,6 +11,7 @@ import { SignUpService } from '../services/sign-up.service';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
+  _=_;
   formValues = {} as SignUp;
   emailPattern=new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
   inputType: string = 'password';
@@ -18,7 +20,8 @@ export class SignUpComponent implements OnInit {
   confirmVisibilityIcon: string = 'visibility';
 
   constructor(private signupService: CommonService,
-    private router:Router) { }
+    private router:Router,
+    private notification:NotificationService) { }
 
 
   ngOnInit(): void {
@@ -42,9 +45,8 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: error => {
-        console.log(error)
+        this.notification.openErrorSnackBar(_.get(error,'error.message','Something Went Wrong In SignUp'))
       }
     })
   }
-
 }

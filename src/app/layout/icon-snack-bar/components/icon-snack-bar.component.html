@@ -1,0 +1,7 @@
+<div class="d-flex align-items-center justify-content-between">
+  <p class="message">{{ data?.message }}</p>
+  <div class="snack-bar-icon d-flex">
+      <i class="material-icons" *ngIf="data?.isSuccess">done</i> 
+      <i class="material-icons" *ngIf="!data?.isSuccess">close</i>
+  </div>
+</div>
