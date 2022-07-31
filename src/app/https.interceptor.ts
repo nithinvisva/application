@@ -18,7 +18,7 @@ export class HttpsInterceptor implements HttpInterceptor {
       setHeaders: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':'https://crud-angular-ap.herokuapp.com/',
+        'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Credentials': 'true',
       }
     });
@@ -26,7 +26,7 @@ export class HttpsInterceptor implements HttpInterceptor {
     request = request.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':'https://crud-angular-ap.herokuapp.com/',
+        'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Credentials': 'true',
       }
     });
