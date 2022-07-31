@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  endPointApi:'https://crud-operation-nodejs.herokuapp.com/'
 };

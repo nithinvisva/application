@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  // endPointApi: 'http://localhost:8000/',
-  endPointApi:'https://crud-operation-nodejs.herokuapp.com/'
+  endPointApi: 'http://localhost:8000/',
 };
 
 /*
