@@ -12,10 +12,12 @@ import { AuthGuard } from './_shared/components/auth.gaurd';
 import { LoginGuard } from './_shared/components/login.gaurd';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpsInterceptor } from './https.interceptor';
+import { IconSnackBarComponent } from './layout/icon-snack-bar/components/icon-snack-bar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    IconSnackBarComponent
   ],
   imports: [
     BrowserModule,
