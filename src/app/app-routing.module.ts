@@ -4,7 +4,7 @@ import { AuthGuard } from './_shared/components/auth.gaurd';
 import { LoginGuard } from './_shared/components/login.gaurd';
 
 const routes: Routes = [
-  { path: '',   redirectTo: '/login', pathMatch: 'full' },
+  { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', loadChildren: () => import('./pages/login/login.module')
   .then(module=> module.LoginModule),
   canActivate: [LoginGuard]
